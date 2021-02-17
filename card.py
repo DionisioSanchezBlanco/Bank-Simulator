@@ -24,6 +24,25 @@ class CreditCard:
     def check_card(self, num_card, pin_card):
         return self.number == num_card and self.pin == pin_card
 
+    # Luhn algorithm to check if card number is correct
+    def luhn_algorithm(self):
+        step_1 = self.number[:len(self.number) - 1]
+        
+        # Multiply odd digits by 2. Take into account the list start with 0, so you will get even indexes
+        step_2 = [int(num) * 2 if i == 0 or i % 2 == 0 else int(num) for i, num in enumerate(step_1)]
+        
+        # Substract 9 to numbers over 9
+        step_3 = [int(num) - 9 if num > 9 else num for num in step_2]
+        
+        # Add all numbers
+        step_3.append(int(self.number[len(self.number) - 1]))
+        
+        # Sum the numbers and check the mod
+        if sum(step_3) % 10 == 0:
+            return True
+        else:
+            return False
+
 def check_balance():
     option_balance = None
     while option_balance != 0:
@@ -50,6 +69,8 @@ while option != 0:
 
     if option == 1:
         card.random_values()
+        while (card.luhn_algorithm() == False):
+            card.random_values()
         print("\nYour card has been created\nYour card number:")
         print(card.number)
         print("Your card PIN:")
