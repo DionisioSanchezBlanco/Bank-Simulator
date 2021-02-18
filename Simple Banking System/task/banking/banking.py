@@ -82,6 +82,7 @@ while option != 0:
         print(card.pin)
         cur.execute("INSERT INTO card (id, number, pin) VALUES (?, ?, ?);", (id_card, card.number, card.pin))
         conn.commit()
+        
     if option == 2:
         print("\nEnter your card number:")
         num_card = input()
