@@ -1,6 +1,13 @@
-# First Stage of Credit card exercise
+# Third Stage of Credit card exercise
 import random
+import sqlite3
 
+# Database connection
+conn = sqlite3.connect("card.s3db")
+cur = conn.cursor()
+cur.execute("DROP TABLE card")
+cur.execute("CREATE TABLE card (id INTEGER, number TEXT, pin TEXT, balance INTEGER DEFAULT 0);")
+conn.commit()
 class CreditCard:
     def __init__(self):
         self.number = None
@@ -60,11 +67,10 @@ def check_balance():
 
 option = None
 card = CreditCard()
+id_card = 0
 
 while option != 0:
-    print("""\n1. Create an account
-2. Log into account
-0. Exit""")
+    print("\n1. Create an account\n2. Log into account\n0. Exit")
     option = int(input())
 
     if option == 1:
@@ -75,7 +81,9 @@ while option != 0:
         print(card.number)
         print("Your card PIN:")
         print(card.pin)
-
+        cur.execute("INSERT INTO card (id, number, pin) VALUES (?, ?, ?);", (id_card, card.number, card.pin))
+        conn.commit()
+        id_card += 1
     if option == 2:
         print("\nEnter your card number:")
         num_card = input()
